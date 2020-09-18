@@ -70,15 +70,18 @@ struct A                                //4
 {
     T* compare(T* a, T* b) //5
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if (a != nullptr && b != nullptr)
+        {
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
+        }
         return nullptr;
     }
 };
 
 struct U
 {
-    float varU1 { 0.1f }, varU2 { 0.2f };
+    float varU1 { 7.1f }, varU2 { 0.2f };
     float function(float* updatedVal)      //12
     {
         if (updatedVal != nullptr)
@@ -91,7 +94,7 @@ struct U
             /*
              write something that makes the distance between that->varU2 and that->VarU1 get smaller
              */
-                this->varU2 += this->varU2 - this->varU1;
+                this->varU2 += 0.01f;
             }
             std::cout << "U's varU2 updated value: " << this->varU2 << std::endl;
             return this->varU2 * this->varU1;
@@ -119,7 +122,7 @@ struct B
             /*
              write something that makes the distance between that->varU2 and that->VarU1 get smaller
              */
-                that->varU2 += that->varU2 - that->varU1;
+                that->varU2 += 0.01f;
             }
             std::cout << "U's varU2 updated value: " << that->varU2 << std::endl;
             return that->varU2 * that->varU1;
@@ -159,15 +162,15 @@ int main()
     }
     else
     {
-        std::cout << "the values of " << n1.name << "and " << n2.name << " are equal!" << std::endl;
+        std::cout << "the values of " << n1.name << " and " << n2.name << " are equal!" << std::endl;
     }
     
     U n3;
     float updatedValue = 5.f;
-    std::cout << "[static func] n3's multiplied values: " << B::function(&n3 ,&updatedValue ) << std::endl;                  //11
+    std::cout << "[static func] n3's multiplied values: " << B::function( &n3, &updatedValue ) << std::endl;                  //11
     
     U n4;
-    std::cout << "[member func] n4's multiplied values: " << n4.function( &updatedValue ) << std::endl;
+   std::cout << "[member func] n4's multiplied values: " << n4.function( &updatedValue ) << std::endl;
 }
 
         
