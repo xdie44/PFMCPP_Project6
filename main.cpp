@@ -33,13 +33,10 @@ struct T
 
 struct A                                //4
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b) //5
     {
-        if (a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
         return nullptr;
     }
 };
@@ -47,55 +44,43 @@ struct A                                //4
 struct U
 {
     float varU1 { 7.1f }, varU2 { 0.2f };
-    float function(float* updatedVal)      //12
+    float function(const float& updatedVal)      //12
     {
-        if (updatedVal != nullptr)
+        std::cout << "U's varU1 value: " << this->varU1 << std::endl;
+        this->varU1 = updatedVal;
+        std::cout << "U's varU1 updated value: " << this->varU1 << std::endl;
+        while( std::abs(this->varU2 - this->varU1) > 0.001f )
         {
-            std::cout << "U's varU1 value: " << this->varU1 << std::endl;
-            this->varU1 = *updatedVal;
-            std::cout << "U's varU1 updated value: " << this->varU1 << std::endl;
-            while( std::abs(this->varU2 - this->varU1) > 0.001f )
-            {
             /*
              write something that makes the distance between that->varU2 and that->VarU1 get smaller
              */
-                this->varU2 += 0.01f;
-            }
-            std::cout << "U's varU2 updated value: " << this->varU2 << std::endl;
-            return this->varU2 * this->varU1;
+            this->varU2 += 0.01f;
         }
-        else
-        {
-            return 0;
-        }
-        
+        std::cout << "U's varU2 updated value: " << this->varU2 << std::endl;
+        return this->varU2 * this->varU1;
+
     }
 };
 
 struct B
 {
-    static float function(U* that, float* updatedVal )        //10
+    static float function(U& that, const float& updatedVal )        //10
     {
-        if (that != nullptr && updatedVal != nullptr)
-        {
-            std::cout << "U's varU1 value: " << that->varU1 << std::endl;
-            that->varU1 = *updatedVal;
-            std::cout << "U's varU1 updated value: " << that->varU1 << std::endl;
+
+        std::cout << "U's varU1 value: " << that.varU1 << std::endl;
+        that.varU1 = updatedVal;
+        std::cout << "U's varU1 updated value: " << that.varU1 << std::endl;
         
-            while( std::abs(that->varU2 - that->varU1) > 0.001f )
-            {
+        while( std::abs(that.varU2 - that.varU1) > 0.001f )
+        {
             /*
              write something that makes the distance between that->varU2 and that->VarU1 get smaller
              */
-                that->varU2 += 0.01f;
-            }
-            std::cout << "U's varU2 updated value: " << that->varU2 << std::endl;
-            return that->varU2 * that->varU1;
+            that.varU2 += 0.01f;
         }
-        else
-        {
-            return 0;
-        }
+        std::cout << "U's varU2 updated value: " << that.varU2 << std::endl;
+        return that.varU2 * that.varU1;
+
     }
 };
         
@@ -119,7 +104,7 @@ int main()
     T n2(4 , "stringN2");                                             //6
     
     A f;                                            //7
-    auto* smaller = f.compare(&n1 ,&n2 );                              //8
+    auto* smaller = f.compare(n1 ,n2 );                              //8
         
     if (smaller != nullptr)
     {
@@ -132,10 +117,10 @@ int main()
     
     U n3;
     float updatedValue = 5.f;
-    std::cout << "[static func] n3's multiplied values: " << B::function( &n3, &updatedValue ) << std::endl;                  //11
+    std::cout << "[static func] n3's multiplied values: " << B::function( n3, updatedValue ) << std::endl;                  //11
     
     U n4;
-   std::cout << "[member func] n4's multiplied values: " << n4.function( &updatedValue ) << std::endl;
+   std::cout << "[member func] n4's multiplied values: " << n4.function( updatedValue ) << std::endl;
 }
 
         
