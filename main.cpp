@@ -35,10 +35,8 @@ struct A                                //4
 {
     T* compare(T& a, T& b) //5
     {
-        
-            if( a.value < b.value ) return &a;
-            if( a.value > b.value ) return &b;
-    
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
         return nullptr;
     }
 };
@@ -46,7 +44,7 @@ struct A                                //4
 struct U
 {
     float varU1 { 7.1f }, varU2 { 0.2f };
-    float function(float& updatedVal)      //12
+    float function(const float& updatedVal)      //12
     {
         std::cout << "U's varU1 value: " << this->varU1 << std::endl;
         this->varU1 = updatedVal;
@@ -66,7 +64,7 @@ struct U
 
 struct B
 {
-    static float function(U& that, float& updatedVal )        //10
+    static float function(U& that, const float& updatedVal )        //10
     {
 
         std::cout << "U's varU1 value: " << that.varU1 << std::endl;
